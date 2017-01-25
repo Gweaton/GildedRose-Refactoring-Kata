@@ -2,7 +2,7 @@ class GildedRose
   SPECIAL_ITEMS = ["Aged Brie", "Backstage passes to a TAFKAL80ETC concert", "Sulfuras, Hand of Ragnaros"]
   MINIMUM_QUALITY = 0
   MAXIMUM_QUALITY = 50
-  CONJURED_DEGRADATION_RATE = 2
+  DEGRADATION_RATE = 2
 
   def initialize(items)
     @items = items
@@ -11,7 +11,7 @@ class GildedRose
   def update_values()
     @items.each do |item|
       update_normal_item(item) if is_normal?(item)
-      update_conjured_item(item, CONJURED_DEGRADATION_RATE) if conjured?(item)
+      update_conjured_item(item, DEGRADATION_RATE) if conjured?(item)
       update_exceptions(item)
     end
   end
@@ -36,7 +36,7 @@ class GildedRose
 
   def decrease_item_quality(item, rate = 1)
     return item.quality = 0 if item.quality - rate < 0
-    return (item.quality -= 2 * rate) if out_of_date?(item) unless item.quality <= MINIMUM_QUALITY + 1
+    return (item.quality -= DEGRADATION_RATE * rate) if out_of_date?(item) unless item.quality <= MINIMUM_QUALITY + 1
     item.quality -= (1 * rate) unless item.quality == MINIMUM_QUALITY
   end
 
@@ -61,8 +61,8 @@ class GildedRose
 
   def update_backstage_passes(item)
     return item.quality = MINIMUM_QUALITY if out_of_date?(item)
-    return update_special(item, 3) if item.sell_in <= 5
-    return update_special(item, 2) if item.sell_in <= 10
+    return update_special(item, DEGRADATION_RATE + 1) if item.sell_in <= 5
+    return update_special(item, DEGRADATION_RATE) if item.sell_in <= 10
     update_special(item)
   end
 
