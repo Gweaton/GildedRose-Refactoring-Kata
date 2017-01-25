@@ -44,13 +44,15 @@ class GildedRose
             item.quality = item.quality - item.quality
           end
         else
-          if item.quality < 50
-            item.quality = item.quality + 1
-          end
+          update_quality_brie(item)
         end
       end
     end
   end
+end
+
+def update_quality_brie(item)
+  item.quality += 1 if item.quality < 50
 end
 
 class Item
