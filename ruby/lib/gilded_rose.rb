@@ -1,4 +1,5 @@
 class GildedRose
+  SPECIAL_ITEMS = ["Aged Brie", "Backstage passes to a TAFKAL80ETC concert", "Sulfuras, Hand of Ragnaros"]
 
   def initialize(items)
     @items = items
@@ -6,13 +7,13 @@ class GildedRose
 
   def update_quality()
     @items.each do |item|
-      return update_brie(item) if item.name == "Aged Brie"
-      return update_backstage_passes(item) if item.name.include? "Backstage passes"
-      return update_normal_item(item) if item.name != "Sulfuras, Hand of Ragnaros"
+      update_normal_item(item) if !(SPECIAL_ITEMS.include? item.name)
+      update_brie(item) if item.name == "Aged Brie"
+      update_backstage_passes(item) if item.name.include? "Backstage passes"
     end
   end
 
-private
+  private
 
   def decrease_sell_in_date(item)
     item.sell_in -= 1
@@ -46,11 +47,11 @@ private
     end
   end
 
-    def update_normal_item(item)
-      decrease_sell_in_date(item)
-      decrease_normal_item_quality(item)
-    end
+  def update_normal_item(item)
+    decrease_sell_in_date(item)
+    decrease_normal_item_quality(item)
   end
+end
 
 class Item
   attr_accessor :name, :sell_in, :quality

@@ -80,5 +80,16 @@ describe GildedRose do
       end
     end
 
+    context 'multiple items' do
+      it "should apply update quality to each item in the items array" do
+        items = [Item.new("item", 2, 2), Item.new("Aged Brie", 4, 4)]
+        GildedRose.new(items).update_quality()
+        expect(items[0].quality).to eq 1
+        expect(items[0].sell_in).to eq 1
+        expect(items[1].quality).to eq 5
+        expect(items[1].sell_in).to eq 3
+      end
+    end
+
   end
 end
