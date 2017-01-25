@@ -1,3 +1,4 @@
+require 'item'
 require 'gilded_rose'
 
 describe GildedRose do
