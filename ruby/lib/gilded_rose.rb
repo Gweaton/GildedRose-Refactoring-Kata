@@ -8,7 +8,7 @@ class GildedRose
   def update_quality()
     @items.each do |item|
       update_normal_item(item) if !(SPECIAL_ITEMS.include? item.name)
-      update_brie(item) if item.name == "Aged Brie"
+      update_special(item) if item.name == "Aged Brie"
       update_backstage_passes(item) if item.name.include? "Backstage passes"
     end
   end
@@ -24,27 +24,24 @@ class GildedRose
   end
 
   def decrease_normal_item_quality(item)
-    item.sell_in < 0 ? item.quality -= 2 : item.quality -= 1 unless item.quality == 0
+    return item.quality -= 2 if out_of_date?(item) unless item.quality <= 1
+    item.quality -= 1 unless item.quality == 0
   end
 
-  def update_brie(item)
-    increase_quality(item)
+  def update_special(item, amount = 1)
+    increase_quality(item, amount)
     decrease_sell_in_date(item)
   end
 
+  def out_of_date?(item)
+    item.sell_in <= 0
+  end
+
   def update_backstage_passes(item)
-    if item.sell_in <= 0
-      item.quality = 0
-    elsif item.sell_in <= 5
-      increase_quality(item, 3)
-      decrease_sell_in_date(item)
-    elsif item.sell_in <= 10
-      increase_quality(item, 2)
-      decrease_sell_in_date(item)
-    else
-      increase_quality(item)
-      decrease_sell_in_date(item)
-    end
+    return item.quality = 0 if out_of_date?(item)
+    return update_special(item, 3) if item.sell_in <= 5
+    return update_special(item, 2) if item.sell_in <= 10
+    update_special(item)
   end
 
   def update_normal_item(item)

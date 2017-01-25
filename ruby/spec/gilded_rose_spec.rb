@@ -16,16 +16,17 @@ describe GildedRose do
       expect(items[0].quality).to eq 1
     end
 
-    it "should reduce quality of normal items by twice as much once sell_in date has passed" do
-      items = [Item.new("item", 0, 4)]
-      GildedRose.new(items).update_quality()
-      expect(items[0].quality).to eq 2
-    end
-
     it "should never set quality to a negative value" do
       items = [Item.new("item", 0, 0)]
       GildedRose.new(items).update_quality()
       expect(items[0].quality).to eq 0
+    end
+
+    it "should reduce quality of normal items by twice as much once sell_in date has passed" do
+      items = [Item.new("item", 0, 4), Item.new("item2", 0, 1)]
+      GildedRose.new(items).update_quality()
+      expect(items[0].quality).to eq 2
+      expect(items[1].quality).to eq 0
     end
 
     context 'special items' do
