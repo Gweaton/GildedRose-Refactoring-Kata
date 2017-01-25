@@ -9,7 +9,7 @@ class GildedRose
       if item.name != "Aged Brie" and item.name != "Backstage passes to a TAFKAL80ETC concert"
         if item.quality > 0
           if item.name != "Sulfuras, Hand of Ragnaros"
-            item.quality = item.quality - 1
+            decrease_normal_item_quality(item)
           end
         end
       else
@@ -51,18 +51,20 @@ class GildedRose
   end
 end
 
-def decrease_sell_in_date(item)
-  item.sell_in -= 1
-end
 
-def increase_quality(item)
-  item.quality += 1 if item.quality < 50
-end
+private
 
-def decrease_normal_item_quality(item)
-  item.quality < 0 ? item.quality -= 2 : item.quality -= 1
-end
+  def decrease_sell_in_date(item)
+    item.sell_in -= 1
+  end
 
+  def increase_quality(item)
+    item.quality += 1 if item.quality < 50
+  end
+
+  def decrease_normal_item_quality(item)
+    item.quality < 0 ? item.quality -= 2 : item.quality -= 1
+  end
 
 class Item
   attr_accessor :name, :sell_in, :quality
