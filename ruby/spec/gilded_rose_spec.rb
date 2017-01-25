@@ -92,5 +92,12 @@ describe GildedRose do
       end
     end
 
+    context 'conjured items' do
+      it "should degrade the quality of regular items twice as fast as normal" do
+        items = [Item.new("Conjured item", 4, 4)]
+        GildedRose.new(items).update_values()
+        expect(items[0].quality).to eq 2
+      end
+    end
   end
 end
