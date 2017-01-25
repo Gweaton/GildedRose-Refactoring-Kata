@@ -5,7 +5,7 @@ class GildedRose
     @items = items
   end
 
-  def update_quality()
+  def update_values()
     @items.each do |item|
       update_normal_item(item) if !(SPECIAL_ITEMS.include? item.name)
       update_special(item) if item.name == "Aged Brie"
