@@ -6,6 +6,9 @@ class GildedRose
 
   def update_quality()
     @items.each do |item|
+
+      return update_brie(item) if item.name == "Aged Brie"
+
       if item.name != "Aged Brie" and item.name != "Backstage passes to a TAFKAL80ETC concert"
         if item.quality > 0
           if item.name != "Sulfuras, Hand of Ragnaros"
@@ -64,6 +67,11 @@ private
 
   def decrease_normal_item_quality(item)
     item.quality < 0 ? item.quality -= 2 : item.quality -= 1
+  end
+
+  def update_brie(item)
+    increase_quality(item)
+    decrease_sell_in_date(item)
   end
 
 class Item
