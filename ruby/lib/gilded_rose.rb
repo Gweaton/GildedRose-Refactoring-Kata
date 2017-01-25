@@ -18,17 +18,34 @@ class GildedRose
 
   private
 
+  def conjured?(item)
+    item.name.include? "Conjured"
+  end
+
+  def is_normal?(item)
+    !(SPECIAL_ITEMS.include? item.name) && !(conjured?(item))
+  end
+
   def decrease_sell_in_date(item)
     item.sell_in -= 1
+  end
+
+  def out_of_date?(item)
+    item.sell_in <= 0
+  end
+
+  def decrease_normal_item_quality(item, rate = 1)
+    return (item.quality -= 2 * rate) if out_of_date?(item) unless item.quality <= MINIMUM_QUALITY + 1
+    item.quality -= (1 * rate) unless item.quality == MINIMUM_QUALITY
   end
 
   def increase_quality(item, amount = 1)
     item.quality += amount if item.quality < MAXIMUM_QUALITY
   end
 
-  def decrease_normal_item_quality(item, rate = 1)
-    return (item.quality -= 2 * rate) if out_of_date?(item) unless item.quality <= MINIMUM_QUALITY + 1
-    item.quality -= (1 * rate) unless item.quality == MINIMUM_QUALITY
+  def update_normal_item(item)
+    decrease_sell_in_date(item)
+    decrease_normal_item_quality(item)
   end
 
   def update_conjured_item(item, rate)
@@ -41,15 +58,6 @@ class GildedRose
     decrease_sell_in_date(item)
   end
 
-  def update_exceptions(item)
-    update_special(item) if item.name == "Aged Brie"
-    update_backstage_passes(item) if item.name.include? "Backstage passes"
-  end
-
-  def out_of_date?(item)
-    item.sell_in <= 0
-  end
-
   def update_backstage_passes(item)
     return item.quality = MINIMUM_QUALITY if out_of_date?(item)
     return update_special(item, 3) if item.sell_in <= 5
@@ -57,17 +65,9 @@ class GildedRose
     update_special(item)
   end
 
-  def update_normal_item(item)
-    decrease_sell_in_date(item)
-    decrease_normal_item_quality(item)
-  end
-
-  def conjured?(item)
-    item.name.include? "Conjured"
-  end
-
-  def is_normal?(item)
-    !(SPECIAL_ITEMS.include? item.name) && !(conjured?(item))
+  def update_exceptions(item)
+    update_special(item) if item.name == "Aged Brie"
+    update_backstage_passes(item) if item.name.include? "Backstage passes"
   end
 end
 
