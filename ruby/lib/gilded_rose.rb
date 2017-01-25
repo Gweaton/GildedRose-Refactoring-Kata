@@ -1,5 +1,6 @@
 class GildedRose
   SPECIAL_ITEMS = ["Aged Brie", "Backstage passes to a TAFKAL80ETC concert", "Sulfuras, Hand of Ragnaros"]
+  MINIMUM_QUALITY = 0
 
   def initialize(items)
     @items = items
@@ -24,8 +25,8 @@ class GildedRose
   end
 
   def decrease_normal_item_quality(item)
-    return item.quality -= 2 if out_of_date?(item) unless item.quality <= 1
-    item.quality -= 1 unless item.quality == 0
+    return item.quality -= 2 if out_of_date?(item) unless item.quality <= MINIMUM_QUALITY + 1
+    item.quality -= 1 unless item.quality == MINIMUM_QUALITY
   end
 
   def update_special(item, amount = 1)
@@ -38,7 +39,7 @@ class GildedRose
   end
 
   def update_backstage_passes(item)
-    return item.quality = 0 if out_of_date?(item)
+    return item.quality = MINIMUM_QUALITY if out_of_date?(item)
     return update_special(item, 3) if item.sell_in <= 5
     return update_special(item, 2) if item.sell_in <= 10
     update_special(item)
