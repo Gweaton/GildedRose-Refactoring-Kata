@@ -6,43 +6,11 @@ class GildedRose
 
   def update_quality()
     @items.each do |item|
-
       return update_brie(item) if item.name == "Aged Brie"
       return update_backstage_passes(item) if item.name.include? "Backstage passes"
-
-
-
-      if item.name != "Aged Brie" and item.name != "Backstage passes to a TAFKAL80ETC concert"
-        if item.quality > 0
-          if item.name != "Sulfuras, Hand of Ragnaros"
-            decrease_normal_item_quality(item)
-          end
-        end
-      else
-
-      end
-      if item.name != "Sulfuras, Hand of Ragnaros"
-        decrease_sell_in_date(item)
-      end
-      if item.sell_in < 0
-        if item.name != "Aged Brie"
-          if item.name != "Backstage passes to a TAFKAL80ETC concert"
-            if item.quality > 0
-              if item.name != "Sulfuras, Hand of Ragnaros"
-                decrease_normal_item_quality(item)
-              end
-            end
-          else
-            item.quality = item.quality - item.quality
-          end
-        else
-          increase_quality(item)
-        end
-      end
+      return update_normal_item(item) if item.name != "Sulfuras, Hand of Ragnaros"
     end
   end
-end
-
 
 private
 
@@ -55,7 +23,7 @@ private
   end
 
   def decrease_normal_item_quality(item)
-    item.quality < 0 ? item.quality -= 2 : item.quality -= 1
+    item.sell_in < 0 ? item.quality -= 2 : item.quality -= 1 unless item.quality == 0
   end
 
   def update_brie(item)
@@ -76,7 +44,12 @@ private
       increase_quality(item)
       decrease_sell_in_date(item)
     end
+  end
 
+    def update_normal_item(item)
+      decrease_sell_in_date(item)
+      decrease_normal_item_quality(item)
+    end
   end
 
 class Item
