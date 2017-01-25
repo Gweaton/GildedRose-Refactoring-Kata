@@ -9,6 +9,7 @@ class GildedRose
 
       return update_brie(item) if item.name == "Aged Brie"
 
+
       if item.name != "Aged Brie" and item.name != "Backstage passes to a TAFKAL80ETC concert"
         if item.quality > 0
           if item.name != "Sulfuras, Hand of Ragnaros"
@@ -17,19 +18,7 @@ class GildedRose
         end
       else
         if item.quality < 50
-          item.quality = item.quality + 1
-          if item.name == "Backstage passes to a TAFKAL80ETC concert"
-            if item.sell_in < 11
-              if item.quality < 50
-                increase_quality(item)
-              end
-            end
-            if item.sell_in < 6
-              if item.quality < 50
-                increase_quality(item)
-              end
-            end
-          end
+          update_backstage_passes(item) if item.name == "Backstage passes to a TAFKAL80ETC concert"
         end
       end
       if item.name != "Sulfuras, Hand of Ragnaros"
@@ -61,8 +50,8 @@ private
     item.sell_in -= 1
   end
 
-  def increase_quality(item)
-    item.quality += 1 if item.quality < 50
+  def increase_quality(item, amount = 1)
+    item.quality += amount if item.quality < 50
   end
 
   def decrease_normal_item_quality(item)
@@ -72,6 +61,22 @@ private
   def update_brie(item)
     increase_quality(item)
     decrease_sell_in_date(item)
+  end
+
+  def update_backstage_passes(item)
+    if item.sell_in <= 0
+      item.quality = 0
+    elsif item.sell_in <= 5
+      increase_quality(item, 3)
+      decrease_sell_in_date(item)
+    elsif item.sell_in <= 10
+      increase_quality(item, 2)
+      decrease_sell_in_date(item)
+    else
+      increase_quality(item)
+      decrease_sell_in_date(item)
+    end
+
   end
 
 class Item
