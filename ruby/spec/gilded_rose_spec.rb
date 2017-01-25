@@ -31,10 +31,17 @@ describe GildedRose do
       expect(items[0].quality).not_to be < 0
     end
 
+
     it "should increase the quality for 'Aged Brie' time update quality is run" do
       items = [Item.new("Aged Brie", 5, 5)]
       GildedRose.new(items).update_quality()
       expect(items[0].quality).to eq 6
+    end
+
+    it "should not set quality above 50" do
+      items = [Item.new("Aged Brie", 0, 50)]
+      GildedRose.new(items).update_quality()
+      expect(items[0].quality).to eq 50
     end
   end
 end
