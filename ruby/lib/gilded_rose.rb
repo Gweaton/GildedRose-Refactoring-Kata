@@ -1,6 +1,7 @@
 class GildedRose
   SPECIAL_ITEMS = ["Aged Brie", "Backstage passes to a TAFKAL80ETC concert", "Sulfuras, Hand of Ragnaros"]
   MINIMUM_QUALITY = 0
+  MAXIMUM_QUALITY = 50
 
   def initialize(items)
     @items = items
@@ -21,7 +22,7 @@ class GildedRose
   end
 
   def increase_quality(item, amount = 1)
-    item.quality += amount if item.quality < 50
+    item.quality += amount if item.quality < MAXIMUM_QUALITY
   end
 
   def decrease_normal_item_quality(item)
