@@ -8,6 +8,8 @@ class GildedRose
     @items.each do |item|
 
       return update_brie(item) if item.name == "Aged Brie"
+      return update_backstage_passes(item) if item.name.include? "Backstage passes"
+
 
 
       if item.name != "Aged Brie" and item.name != "Backstage passes to a TAFKAL80ETC concert"
@@ -17,9 +19,7 @@ class GildedRose
           end
         end
       else
-        if item.quality < 50
-          update_backstage_passes(item) if item.name == "Backstage passes to a TAFKAL80ETC concert"
-        end
+
       end
       if item.name != "Sulfuras, Hand of Ragnaros"
         decrease_sell_in_date(item)
