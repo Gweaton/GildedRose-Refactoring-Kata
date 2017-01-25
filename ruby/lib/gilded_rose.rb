@@ -12,8 +12,7 @@ class GildedRose
     @items.each do |item|
       update_normal_item(item) if is_normal?(item)
       update_conjured_item(item, CONJURED_DEGRADATION_RATE) if conjured?(item)
-      update_special(item) if item.name == "Aged Brie"
-      update_backstage_passes(item) if item.name.include? "Backstage passes"
+      update_exceptions(item)
     end
   end
 
@@ -40,6 +39,11 @@ class GildedRose
   def update_special(item, amount = 1)
     increase_quality(item, amount)
     decrease_sell_in_date(item)
+  end
+
+  def update_exceptions(item)
+    update_special(item) if item.name == "Aged Brie"
+    update_backstage_passes(item) if item.name.include? "Backstage passes"
   end
 
   def out_of_date?(item)
