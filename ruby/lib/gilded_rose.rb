@@ -30,7 +30,7 @@ class GildedRose
         end
       end
       if item.name != "Sulfuras, Hand of Ragnaros"
-        item.sell_in = item.sell_in - 1
+        decrease_sell_in_date(item)
       end
       if item.sell_in < 0
         if item.name != "Aged Brie"
@@ -54,6 +54,11 @@ end
 def update_quality_brie(item)
   item.quality += 1 if item.quality < 50
 end
+
+def decrease_sell_in_date(item)
+  item.sell_in -= 1
+end
+
 
 class Item
   attr_accessor :name, :sell_in, :quality
