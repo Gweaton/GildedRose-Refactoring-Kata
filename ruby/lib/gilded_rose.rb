@@ -34,7 +34,8 @@ class GildedRose
     item.sell_in <= 0
   end
 
-  def decrease_normal_item_quality(item, rate = 1)
+  def decrease_item_quality(item, rate = 1)
+    return item.quality = 0 if item.quality - rate < 0
     return (item.quality -= 2 * rate) if out_of_date?(item) unless item.quality <= MINIMUM_QUALITY + 1
     item.quality -= (1 * rate) unless item.quality == MINIMUM_QUALITY
   end
@@ -45,11 +46,11 @@ class GildedRose
 
   def update_normal_item(item)
     decrease_sell_in_date(item)
-    decrease_normal_item_quality(item)
+    decrease_item_quality(item)
   end
 
   def update_conjured_item(item, rate)
-    decrease_normal_item_quality(item, rate)
+    decrease_item_quality(item, rate)
     decrease_sell_in_date(item)
   end
 
